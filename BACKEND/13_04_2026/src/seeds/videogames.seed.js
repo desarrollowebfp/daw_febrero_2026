@@ -1,0 +1,221 @@
+require("dotenv").config();
+const mongoose = require("mongoose");
+const connect = require("../config/db");
+const Videogame = require("../api/models/videogame.model");
+
+//Vamos a almacenar los ids de la consola para insertarlos de una manera más comoda en los videojuegos
+const CONSOLE_IDS = {
+  PS5: "69c43b789cbaba340c572ddc",
+  XBX: "69c43b789cbaba340c572ddd",
+  NS1: "69c43b789cbaba340c572dde",
+  NS2: "69c43b789cbaba340c572ddf",
+  STD: "69c43b789cbaba340c572de0",
+};
+
+const videogames = [
+  {
+    title: "Marvel's Spider-Man 2",
+    studio: "Insomniac Games",
+    releaseYear: 2023,
+    genre: "Action",
+    pegi: 16,
+    price: 79.99,
+    rating: 9.3,
+    multiplayer: false,
+    stock: 18,
+    consoles: [CONSOLE_IDS.PS5],
+  },
+  {
+    title: "God of War Ragnarök",
+    studio: "Santa Monica Studio",
+    releaseYear: 2022,
+    genre: "Action",
+    pegi: 18,
+    price: 69.99,
+    rating: 9.5,
+    multiplayer: false,
+    stock: 14,
+    consoles: [CONSOLE_IDS.PS5],
+  },
+  {
+    title: "Astro Bot",
+    studio: "Team Asobi",
+    releaseYear: 2024,
+    genre: "Platform",
+    pegi: 7,
+    price: 69.99,
+    rating: 9.1,
+    multiplayer: false,
+    stock: 20,
+    consoles: [CONSOLE_IDS.PS5],
+  },
+  {
+    title: "Halo Infinite",
+    studio: "343 Industries",
+    releaseYear: 2021,
+    genre: "Shooter",
+    pegi: 16,
+    price: 39.99,
+    rating: 8.4,
+    multiplayer: true,
+    stock: 16,
+    consoles: [CONSOLE_IDS.XBX],
+  },
+  {
+    title: "Forza Horizon 5",
+    studio: "Playground Games",
+    releaseYear: 2021,
+    genre: "Racing",
+    pegi: 3,
+    price: 59.99,
+    rating: 9.2,
+    multiplayer: true,
+    stock: 12,
+    consoles: [CONSOLE_IDS.XBX],
+  },
+  {
+    title: "Starfield",
+    studio: "Bethesda Game Studios",
+    releaseYear: 2023,
+    genre: "RPG",
+    pegi: 18,
+    price: 79.99,
+    rating: 8.1,
+    multiplayer: false,
+    stock: 10,
+    consoles: [CONSOLE_IDS.XBX],
+  },
+  {
+    title: "The Legend of Zelda: Tears of the Kingdom",
+    studio: "Nintendo",
+    releaseYear: 2023,
+    genre: "Adventure",
+    pegi: 12,
+    price: 69.99,
+    rating: 9.8,
+    multiplayer: false,
+    stock: 22,
+    consoles: [CONSOLE_IDS.NS1],
+  },
+  {
+    title: "Super Mario Bros. Wonder",
+    studio: "Nintendo",
+    releaseYear: 2023,
+    genre: "Platform",
+    pegi: 3,
+    price: 59.99,
+    rating: 9.0,
+    multiplayer: true,
+    stock: 24,
+    consoles: [CONSOLE_IDS.NS1],
+  },
+  {
+    title: "Animal Crossing: New Horizons",
+    studio: "Nintendo",
+    releaseYear: 2020,
+    genre: "Simulation",
+    pegi: 3,
+    price: 49.99,
+    rating: 8.9,
+    multiplayer: true,
+    stock: 19,
+    consoles: [CONSOLE_IDS.NS1],
+  },
+  {
+    title: "Mario Kart World",
+    studio: "Nintendo",
+    releaseYear: 2025,
+    genre: "Racing",
+    pegi: 3,
+    price: 79.99,
+    rating: 8.7,
+    multiplayer: true,
+    stock: 11,
+    consoles: [CONSOLE_IDS.NS2],
+  },
+  {
+    title: "Metroid Prime 4: Beyond",
+    studio: "Retro Studios",
+    releaseYear: 2025,
+    genre: "Adventure",
+    pegi: 12,
+    price: 69.99,
+    rating: 8.8,
+    multiplayer: false,
+    stock: 9,
+    consoles: [CONSOLE_IDS.NS2],
+  },
+  {
+    title: "Donkey Kong Bananza",
+    studio: "Nintendo",
+    releaseYear: 2025,
+    genre: "Platform",
+    pegi: 7,
+    price: 69.99,
+    rating: 8.5,
+    multiplayer: false,
+    stock: 13,
+    consoles: [CONSOLE_IDS.NS2],
+  },
+  {
+    title: "Elden Ring",
+    studio: "FromSoftware",
+    releaseYear: 2022,
+    genre: "RPG",
+    pegi: 16,
+    price: 59.99,
+    rating: 9.7,
+    multiplayer: true,
+    stock: 21,
+    consoles: [CONSOLE_IDS.PS5, CONSOLE_IDS.XBX, CONSOLE_IDS.STD],
+  },
+  {
+    title: "Balatro",
+    studio: "LocalThunk",
+    releaseYear: 2024,
+    genre: "Indie",
+    pegi: 12,
+    price: 14.99,
+    rating: 9.0,
+    multiplayer: false,
+    stock: 30,
+    consoles: [
+      CONSOLE_IDS.PS5,
+      CONSOLE_IDS.XBX,
+      CONSOLE_IDS.NS1,
+      CONSOLE_IDS.STD,
+    ],
+  },
+  {
+    title: "Stardew Valley",
+    studio: "ConcernedApe",
+    releaseYear: 2016,
+    genre: "Simulation",
+    pegi: 7,
+    price: 14.99,
+    rating: 9.1,
+    multiplayer: true,
+    stock: 35,
+    consoles: [
+      CONSOLE_IDS.PS5,
+      CONSOLE_IDS.XBX,
+      CONSOLE_IDS.NS1,
+      CONSOLE_IDS.STD,
+    ],
+  },
+];
+
+const seedVideogames = async () => {
+  try {
+    await connect();
+    await Videogame.deleteMany();
+    await Videogame.insertMany(videogames);
+    console.log("Videojuegos insertados correctamente");
+  } catch (error) {
+    console.error("Error insertando los videojuegos", error.message);
+  } finally {
+    await mongoose.disconnect()
+  }
+};
+
+seedVideogames();
