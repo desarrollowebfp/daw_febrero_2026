@@ -1,0 +1,19 @@
+{
+	"name": "use-local-storage-prometeo",
+	"version": "0.0.1",
+	"description": "Un hook de React de prueba que hace uso del localStorage",
+	"keywords": [
+		"react",
+		"hook",
+		"localstorage",
+		"js",
+		"jsx"
+	],
+	"license": "ISC",
+	"author": "Antonio Rosales Martínez (http://lethamburn.vercel.app/)",
+	"type": "module",
+	"main": "index.js",
+	"peerDependencies": {
+		"react": "^19.2.6"
+	}
+}
