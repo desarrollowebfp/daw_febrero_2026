@@ -2,7 +2,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user.model");
 
-const register = async (req, res) => {
+const register = async (req, res, next) => {
 	try {
 		const { username, email, password } = req.body;
 		if (!username || !email || !password) {
@@ -20,13 +20,11 @@ const register = async (req, res) => {
 
 		return res.status(200).json({ data: "Usuario creado correctamente" });
 	} catch (error) {
-		return res
-			.status(500)
-			.json({ message: "Error creando el usuario", error: error.message });
+		return next(error);
 	}
 };
 
-const login = async (req, res) => {
+const login = async (req, res, next) => {
 	try {
 		const { email, password } = req.body;
 
@@ -51,24 +49,20 @@ const login = async (req, res) => {
 		const userLogin = await User.findById(user._id).select("-password");
 		return res.status(200).json({ token, user: userLogin });
 	} catch (error) {
-		return res
-			.status(500)
-			.json({ message: "Error iniciando sesión", error: error.message });
+		return next(error);
 	}
 };
 
-const getMe = async (req, res) => {
+const getMe = async (req, res, next) => {
 	try {
 		const user = await User.findById(req.user._id).select("-password");
 		return res.status(200).json(user);
 	} catch (error) {
-		return res
-			.status(500)
-			.json({ message: "Error encontrando al usuario", error: error.message });
+		return next(error);
 	}
 };
 
-const updateUsername = async (req, res) => {
+const updateUsername = async (req, res, next) => {
 	try {
 		const { username } = req.body;
 		if (!username) {
@@ -81,13 +75,11 @@ const updateUsername = async (req, res) => {
 
 		return res.status(200).json({ data: "Usuario modificado correctamente" });
 	} catch (error) {
-		return res
-			.status(500)
-			.json({ message: "Error modificando al usuario", error: error.message });
+		return next(error);
 	}
 };
 
-const updatePassword = async (req, res) => {
+const updatePassword = async (req, res, next) => {
 	try {
 		const { currentPassword, newPassword } = req.body;
 		if (!currentPassword || !newPassword) {
@@ -107,14 +99,11 @@ const updatePassword = async (req, res) => {
 			.status(200)
 			.json({ data: "Contraseña modificada correctamente" });
 	} catch (error) {
-		return res.status(500).json({
-			message: "Error modificando la contraseña",
-			error: error.message,
-		});
+		return next(error);
 	}
 };
 
-const updateAvatar = async (req, res) => {
+const updateAvatar = async (req, res, next) => {
 	try {
 		if (!req.file) {
 			return res.status(400).json({ message: "Fichero obligatorio" });
@@ -124,10 +113,7 @@ const updateAvatar = async (req, res) => {
 		await req.user.save();
 		return res.status(200).json({ data: "Avatar modificado correctamente" });
 	} catch (error) {
-		return res.status(500).json({
-			message: "Error modificando el avatar",
-			error: error.message,
-		});
+		return next(error);
 	}
 };
 

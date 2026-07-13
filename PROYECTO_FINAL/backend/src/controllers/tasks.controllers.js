@@ -1,6 +1,6 @@
 const Task = require("../models/task.model");
 
-const getTasks = async (req, res) => {
+const getTasks = async (req, res, next) => {
 	try {
 		//ejemplo: /api/tasks?status=pending&sort=date_asc
 		const { status, date, sort } = req.query;
@@ -29,13 +29,11 @@ const getTasks = async (req, res) => {
 
 		return res.status(200).json(tasks);
 	} catch (error) {
-		return res
-			.status(500)
-			.json({ message: "Error obteniendo las tareas", error: error.message });
+		return next(error);
 	}
 };
 
-const createTask = async (req, res) => {
+const createTask = async (req, res, next) => {
 	try {
 		const { title, date, status } = req.body;
 		if (!title || !date) {
@@ -51,13 +49,11 @@ const createTask = async (req, res) => {
 		const taskSaved = await newTask.save();
 		return res.status(200).json(taskSaved);
 	} catch (error) {
-		return res
-			.status(500)
-			.json({ message: "Error creando la tarea", error: error.message });
+		return next(error);
 	}
 };
 
-const updateTask = async (req, res) => {
+const updateTask = async (req, res, next) => {
 	try {
 		const { title, date, status } = req.body;
 		const task = await Task.findOne({ _id: req.params.id, user: req.user._id });
@@ -72,13 +68,11 @@ const updateTask = async (req, res) => {
 		const taskUpdated = await task.save();
 		return res.status(200).json(taskUpdated);
 	} catch (error) {
-		return res
-			.status(500)
-			.json({ message: "Error actualizando la tarea", error: error.message });
+		return next(error);
 	}
 };
 
-const deleteTask = async (req, res) => {
+const deleteTask = async (req, res, next) => {
 	try {
 		const task = await Task.findOneAndDelete({
 			_id: req.params.id,
@@ -91,9 +85,7 @@ const deleteTask = async (req, res) => {
 
 		return res.status(200).json({ data: "Tarea borrada correctamente" });
 	} catch (error) {
-		return res
-			.status(500)
-			.json({ message: "Error borrando la tarea", error: error.message });
+		return next(error);
 	}
 };
 
