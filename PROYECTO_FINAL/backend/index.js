@@ -15,7 +15,7 @@ connectDB();
 
 server.use(
 	cors({
-		origin: "URL DEL FRONTAL",
+		origin: "http://localhost:5173",
 	}),
 );
 
