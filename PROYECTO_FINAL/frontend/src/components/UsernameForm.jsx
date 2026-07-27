@@ -29,18 +29,29 @@ const UsernameForm = ({ onMessage }) => {
 	};
 
 	return (
-		<form onSubmit={handleSubmit(onSubmit)}>
-			<h2>Cambiar username</h2>
+		<form
+			onSubmit={handleSubmit(onSubmit)}
+			className="flex flex-col gap-4 p-6 rounded-xl border border-secondary/10 bg-secondary/5"
+		>
+			<h2 className="font-semibold">Cambiar username</h2>
 			<input
 				type="text"
+				className="w-full px-4 py-3 rounded-lg bg-primary border border-secondary/20 outline-none focus:border-highlight transition-colors"
 				{...register("username", {
 					required: "El username es obligatorio",
-					minLenght: { value: 3, message: "Mínimo 3 caracteres" },
+					minLength: { value: 3, message: "Mínimo 3 caracteres" },
 				})}
 			/>
-			{errors.username && <p>{errors.username.message}</p>}
-			{errors.root && <p>{errors.root.messageF}</p>}
-			<button type="submit">Guardar username</button>
+			{errors.username && (
+				<p className="text-highlight">{errors.username.message}</p>
+			)}
+			{errors.root && <p className="text-highlight">{errors.root.message}</p>}
+			<button
+				type="submit"
+				className="mt-auto px-6 py-3 rounded-lg bg-highlight text-secondary font-semibold hover:opacity-90 transition-opacity cursor-pointer"
+			>
+				Guardar username
+			</button>
 		</form>
 	);
 };

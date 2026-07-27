@@ -22,7 +22,7 @@ const Dashboard = () => {
 
 	const handleSubmitTask = useCallback(
 		async (formData) => {
-			if (taskEdit) {
+			if (taskToEdit) {
 				await updateTask(token, taskToEdit._id, formData);
 				setTaskToEdit(null);
 			} else {
@@ -44,9 +44,11 @@ const Dashboard = () => {
 	const clearTaskToEdit = useCallback(() => setTaskToEdit(null), []);
 
 	return (
-		<section>
-			<h1>Dashboard</h1>
-			<p>Hola {user?.username}</p>
+		<section className="flex flex-col gap-8">
+			<header className="flex flex-col gap-1">
+				<h1 className="text-md font-serif font-bold">Dashboard</h1>
+				<p className="text-secondary/60">Hola {user?.username}</p>
+			</header>
 			<TaskForm
 				onSubmitTask={handleSubmitTask}
 				taskToEdit={taskToEdit}
@@ -61,3 +63,5 @@ const Dashboard = () => {
 		</section>
 	);
 };
+
+export default Dashboard;

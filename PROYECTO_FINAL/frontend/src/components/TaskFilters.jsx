@@ -1,9 +1,13 @@
 import { memo } from "react";
 
+const controlClasses =
+	"px-4 py-3 rounded-lg bg-primary border border-secondary/20 outline-none focus:border-highlight transition-colors cursor-pointer";
+
 const TaskFilters = memo(({ filters, setFilters }) => {
 	return (
-		<section>
+		<section className="flex flex-col sm:flex-row flex-wrap gap-4">
 			<select
+				className={controlClasses}
 				value={filters.status}
 				onChange={(ev) => setFilters({ ...filters, status: ev.target.value })}
 			>
@@ -13,10 +17,12 @@ const TaskFilters = memo(({ filters, setFilters }) => {
 			</select>
 			<input
 				type="date"
+				className={controlClasses}
 				value={filters.date}
 				onChange={(ev) => setFilters({ ...filters, date: ev.target.value })}
 			/>
 			<select
+				className={controlClasses}
 				value={filters.sort}
 				onChange={(ev) => setFilters({ ...filters, sort: ev.target.value })}
 			>
